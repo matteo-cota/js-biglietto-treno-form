@@ -8,17 +8,17 @@ console.log('JS OK');
    4. Definisci il prezzo per chilometro
    5. Calcola il prezzo base del biglietto
    6. Inizializza il prezzo finale del biglietto
-   7. Applica lo sconto per minorenni (20% di sconto)
-   8. Applica lo sconto per over 65 (40% di sconto)
-   9. Arrotonda i prezzi a due decimali
-   10. Mostra i risultati nella console
-   11. Aggiorna il contenuto del biglietto con i valori calcolati
-   12. Mostra il biglietto 
+   7. Applica lo sconto in base alla fascia d'età
+   8. Arrotonda i prezzi a due decimali
+   9. Mostra i risultati nella console
+   10. Aggiorna il contenuto del biglietto con i valori calcolati
+   11. Mostra il biglietto 
+   12. Aggiungi un event listener al bottone "Annulla" per gestire il reset del form
 */
 
 // Selezioniamo il form e il paragrafo dove visualizzeremo il risultato
-const resultelement = document.getElementById('ticket');
-console.log(resultelement);
+const resultElement = document.getElementById('ticket');
+console.log(resultElement);
 
 // Aggiungi un event listener al form per gestire la sottomissione del form
 document.getElementById('ticketForm').addEventListener('submit', function (event) {
@@ -27,7 +27,7 @@ document.getElementById('ticketForm').addEventListener('submit', function (event
     // Ottieni i valori dagli input del form
     const name = document.getElementById('name').value;
     const km = parseFloat(document.getElementById('km').value);
-    const eta = parseInt(document.getElementById('eta').value);
+    const eta = document.getElementById('eta').value;
 
     // Definisci il prezzo per chilometro
     const prezzoPerKm = 0.21;
@@ -38,33 +38,31 @@ document.getElementById('ticketForm').addEventListener('submit', function (event
     // Inizializza il prezzo finale del biglietto
     let prezzoFinale = prezzoBase;
 
-    // Applica lo sconto per minorenni (20% di sconto)
-    if (eta < 18) {
+    // Applica lo sconto in base alla fascia d'età
+    if (eta === 'minorenne') {
         prezzoFinale = prezzoBase * 0.80;
-    }
-    // Applica lo sconto per over 65 (40% di sconto)
-    else if (eta > 65) {
+    } else if (eta === 'over65') {
         prezzoFinale = prezzoBase * 0.60;
     }
 
     // Arrotonda i prezzi a due decimali
-    prezzoBase = prezzoBase.toFixed(2);
     prezzoFinale = prezzoFinale.toFixed(2);
 
     // Mostra i risultati nella console
     console.log(`Chilometri: ${km} km`);
-    console.log(`Età del passeggero: ${eta} anni`);
-    console.log(`Prezzo prima dello sconto: €${prezzoBase}`);
+    console.log(`Età del passeggero: ${eta}`);
     console.log(`Prezzo totale del biglietto: €${prezzoFinale}`);
 
     // Aggiorna il contenuto del biglietto con i valori calcolati
     document.getElementById('ticketName').innerText = name;
-    document.getElementById('ticketKm').innerText = km;
-    document.getElementById('ticketEta').innerText = eta;
-    document.getElementById('ticketBasePrice').innerText = prezzoBase;
-    document.getElementById('ticketFinalPrice').innerText = prezzoFinale;
+    document.getElementById('ticketFinalPrice').innerText = `€${prezzoFinale}`;
 
-    // Mostra il biglietto 
+    // Mostra il biglietto nascosto
     document.getElementById('ticket').style.display = 'block';
 });
 
+// Aggiungi un event listener al bottone "Annulla" per gestire il reset del form
+document.getElementById('annullaButton').addEventListener('click', function () {
+    document.getElementById('ticketForm').reset();
+    document.getElementById('ticket').style.display = 'none';
+});
